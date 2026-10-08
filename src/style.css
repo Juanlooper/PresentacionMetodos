@@ -19,3 +19,30 @@
 /* Presentation-sized execution screen for the commented capture dossier. */
 .capture-mode .header,.capture-mode .hero,.capture-mode .problem,.capture-mode .conclusions,.capture-mode .download-card,.capture-mode .report,.capture-mode footer,.capture-mode .editor,.capture-mode .status-bar,.capture-mode .implementation-note,.capture-mode .notice{display:none}.capture-mode main{max-width:1320px;margin:15px auto}.capture-mode .section-heading{margin:5px 0 12px}.capture-mode .section-heading h2{font-size:23px}.capture-mode .section-heading p{margin-top:3px}.capture-mode .method-tabs{margin-bottom:12px}.capture-mode .method{padding:10px 16px}.capture-mode .execution-terminal{margin-top:12px}.capture-mode .terminal-output{height:165px}.capture-mode .terminal-explanation{padding:6px 20px}.capture-mode .terminal-title{padding:10px 20px}.capture-mode .terminal-controls{padding:9px 20px}.capture-mode .terminal-current{padding:8px 20px}.capture-mode .debug-source{height:220px;min-height:220px;max-height:220px}.capture-mode .section-kicker{margin-top:4px}.capture-mode .lab{padding-top:0}
 .capture-mode *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.capture-mode .statement{white-space:pre-wrap;min-width:0}.capture-mode .statement code{overflow-wrap:anywhere;min-width:0}.capture-mode .line-number{flex-shrink:0}
+
+/* Clear reading rhythm for the oral explanation and the download pack. */
+.explain-code{margin:16px 18px 0;padding:16px 18px;border:1px solid #785594;border-radius:10px;background:linear-gradient(120deg,#453054,#33233f)}
+.explain-code>span{font-size:10px;letter-spacing:1.4px;color:#edb8da;font-weight:700}
+.explain-code p{font-size:13px;line-height:1.8;color:#f4eaf9;margin:9px 0}
+.explain-code small{color:#cdb7dc;font-size:11px;line-height:1.7}
+.variable-watch code small{display:block;font:10px/1.5 'DM Sans',sans-serif;color:#cdb7dc;max-width:180px;margin-top:3px}
+.variable-watch>div{align-items:center;padding:8px 10px}.variable-watch strong{font-size:13px}
+.debug-source{font-size:12px;line-height:1.9}.debug-note{font-size:11px;line-height:1.7}
+.terminal-view{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;border-bottom:1px solid #493154;color:#cab3d9;font-size:11px}
+.terminal-view>div{display:flex;gap:6px}.terminal-view button{border:1px solid #694582;border-radius:6px;color:#d9bfe9;background:transparent;font-size:11px;padding:7px 10px}
+.terminal-view button[aria-pressed=true]{background:#674288;color:white;border-color:#b58bd0}
+.terminal-current p{color:#d3bce0;font-size:12px;line-height:1.8}.terminal-explanation{font-size:11px;color:#c8b4d4}
+.execution-terminal .terminal-output{height:230px;font-size:13px;line-height:1.9}
+.download-card{padding:36px;gap:24px;box-shadow:0 16px 40px #8353b00d;align-items:flex-start}
+.download-card h2{font-size:25px;color:#63417b}.download-card p{font-size:13px;line-height:1.8;max-width:460px}
+.download-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}.download-tags span{background:#ffffffaa;border:1px solid #dfcbe9;color:#82569b;font-size:10px;padding:5px 9px;border-radius:20px}
+.download-actions{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+.download-actions>a:not(.primary){font-size:12px;color:#754895;text-decoration:underline;text-underline-offset:4px}
+.download-actions .primary{font-size:12px}.report p{font-size:12px;line-height:1.8}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #c489d7;outline-offset:4px}
+@media(max-width:960px){.download-card{flex-wrap:wrap}.download-actions{margin-left:0}.explain-code{padding:12px}.explain-code p{font-size:12px}}
+@media(max-width:700px){.download-card{padding:24px}.download-actions{align-items:stretch;margin-top:22px;gap:14px;text-align:center}.terminal-view{padding:10px 14px;flex-wrap:wrap}.execution-terminal .terminal-output{font-size:11px}.debug-source{font-size:11px}.explain-code{margin:12px}.download-tags{gap:5px}}
+@media print{.download-actions{display:none}}
+.matrix-row{color:#76508e}.column-labels{color:#9674ac}.matrix-legend{color:#856495}
+@media(max-width:700px){.hero-art .orbit-one{width:86%;max-width:86%}}
+@media(max-width:700px){.statement{white-space:pre-wrap;min-width:0}.statement code{white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}.statement .line-number{flex-shrink:0}}

@@ -1,0 +1,63 @@
+============================================================
+  LABORATORIO 2 | CODIGO C PARA EXPLICAR
+============================================================
+
+CONTENIDO
+  laboratorio.c        Los tres metodos en C11.
+  guia-c.html          Guia visual: abrir en cualquier navegador.
+  compilar-windows.cmd Compila con GCC y permite elegir ejemplo/manual.
+  LEEME-C.txt          Estas instrucciones.
+
+INICIO RAPIDO EN WINDOWS
+  Si GCC esta instalado y disponible en PATH, abre compilar-windows.cmd.
+  Elige 1 para ejecutar el ejemplo con los tres metodos.
+  Elige 2 para introducir dimensiones, coeficientes y metodo.
+
+DESDE UNA TERMINAL
+  gcc -std=c11 -Wall -Wextra -pedantic laboratorio.c -lm -o laboratorio
+  Windows PowerShell: .\laboratorio.exe --ejemplo
+  Linux/macOS:        ./laboratorio --ejemplo
+  Sin --ejemplo, se abre la entrada manual.
+  El asistente .cmd es exclusivo de Windows; el C usa la biblioteca estandar.
+
+ENTRADA MANUAL: EJEMPLO PRINCIPAL (GAUSS-SEIDEL)
+  Escribe con punto decimal, sin separadores de miles:
+  3 3
+  0.52 0.20 0.25 4800
+  0.30 0.50 0.20 5810
+  0.18 0.30 0.55 5690
+  3
+  5 100
+
+  Primer par: ecuaciones e incognitas (deben ser iguales y positivas).
+  Cada fila: coeficientes y termino independiente b.
+  Metodo: 1 = Gauss, 2 = Gauss-Jordan, 3 = Gauss-Seidel.
+  Solo Seidel pide tolerancia porcentual y limite de iteraciones.
+
+ORDEN PARA SUSTENTAR
+  1. Define x1, x2, x3: kg obtenidos de cada taller.
+  2. Explica a[i][j]: fila i, columna j; los indices comienzan en 0.
+  3. Explica gauss, gauss_jordan o seidel como una funcion independiente.
+  4. Muestra resultado y residuo: sustituir x en las ecuaciones originales.
+  5. Deja crear/liberar para explicar el manejo de memoria al final.
+
+RESULTADOS DE REFERENCIA (kg)
+  Gauss y Jordan: 4011.62790698, 7162.79069767, 5125.58139535.
+  Seidel, desde cero: 4 iteraciones con tolerancia 5 %.
+  Aproximacion: 4037.83014330, 7168.36343168, 5113.96644491.
+  Residuo maximo de esa aproximacion: 11.83597208 kg.
+
+PREGUNTAS CLAVE
+  Gauss: hace ceros debajo del pivote y resuelve desde la ultima fila.
+  Jordan: hace un 1 en el pivote y ceros en el resto de su columna.
+  Seidel: usa cada nuevo valor inmediatamente en la misma iteracion.
+  El 5 % mide cambio entre iteraciones, no error respecto a la solucion exacta.
+  Llegar al limite de iteraciones no significa alcanzar la tolerancia.
+  El ejemplo no tiene dominancia estricta en todas las filas.
+  Eso no prueba divergencia: aqui alcanza el criterio en 4 iteraciones.
+
+EN LA WEB
+  Matriz, codigo y terminal comparten el mismo paso.
+  La web ejecuta JavaScript equivalente; el C se ejecuta con un compilador.
+  Resumen claro oculta las matrices de la salida; Con matrices las muestra.
+  El archivo C descargable es el mismo que se muestra en el panel de codigo.

@@ -29,3 +29,23 @@ test('Seidel reveals new and old variable values and ends with real numeric outp
  const sum=r.steps.find(s=>s.tag==='iterate'&&s.vars.i===1&&s.vars.j===0);assert.equal(sum.vars['x[0]'],firstX.x[0]);
  assert.match(r.steps.at(-1).stdout,/Tolerancia alcanzada en 4 iteraciones/);assert.match(r.steps.at(-1).stdout,/11.83597208/);
 });
+
+test('Highlighted lines belong to the method being explained, including stop conditions',async()=>{
+ const {locateSourceLine}=await import('../src/codeGuide.js');
+ const {readFile}=await import('node:fs/promises');
+ const source=await readFile(new URL('../public/laboratorio.c',import.meta.url),'utf8');
+ const systems=[workshops,[[0,2,4],[1,1,3]],[[1,2,3],[2,4,6]],[[1,0,0],[0,1,0]],[[1,2,3],[3,1,4]],[[1,1e6,1e308],[1e6,1,1]]];
+ for(const method of ['gauss','jordan','seidel']) for(const matrix of systems) {
+  for(const step of solve(matrix,method,5,5).steps) {
+   const line=locateSourceLine(source,step);
+   assert.ok(line>=0,`${method}: ${step.scope}: ${step.code}`);
+   if(step.tag!=='input'&&step.tag!=='result') assert.equal(step.scope,method==='jordan'?'gauss_jordan':method==='gauss'?'gauss':'seidel');
+  }
+ }
+});
+
+test('Iteration limit and method names are validated',()=>{
+ assert.throws(()=>solve(workshops,'seidel',5,0));
+ assert.throws(()=>solve(workshops,'seidel',5,1.5));
+ assert.throws(()=>solve(workshops,'unknown'));
+});

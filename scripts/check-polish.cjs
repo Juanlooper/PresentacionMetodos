@@ -1,0 +1,50 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const {chromium} = require(process.env.PLAYWRIGHT_PACKAGE || 'playwright');
+
+(async()=>{
+  const browser=await chromium.launch({channel:'msedge',headless:true});
+  const page=await browser.newPage({viewport:{width:1440,height:1100}});
+  const errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('http://127.0.0.1:5173');
+  await page.locator('#laboratorio').scrollIntoViewIfNeeded();
+  for(let index=0;index<3;index++) {
+    await page.locator('.method').nth(index).click();
+    await page.locator('.step-slider').focus();
+    await page.locator('.step-slider').press('End');
+    await page.waitForTimeout(100);
+    const fn=['gauss','gauss_jordan','seidel'][index];
+    assert.ok((await page.locator('.explain-code').innerText()).includes(index===2?fn:'resultado'));
+    assert.ok((await page.locator('.terminal-output').innerText()).includes('Residuo maximo'));
+    await page.getByRole('button',{name:'Con matrices',exact:true}).click();
+    assert.ok((await page.locator('.terminal-output').innerText()).includes('0.52000000'));
+    await page.getByRole('button',{name:'Resumen claro',exact:true}).click();
+    assert.ok(!/^\s*0\.52000000/m.test(await page.locator('.terminal-output').innerText()));
+    await page.locator('.terminal-controls').getByRole('button',{name:'Reiniciar',exact:true}).click();
+    await page.locator('.terminal-controls').getByRole('button',{name:'Siguiente →',exact:true}).click();
+    assert.ok((await page.locator('.explain-code').innerText()).includes(fn));
+  }
+  await page.locator('.workspace').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(650);
+  await page.screenshot({path:'qa/pulido-escritorio.png'});
+  const code=await page.request.get('http://127.0.0.1:5173/laboratorio.c');
+  assert.equal(await code.text(),fs.readFileSync('public/laboratorio.c','utf8'));
+  assert.equal((await page.request.get('http://127.0.0.1:5173/laboratorio-c.zip')).status(),200);
+  await page.setViewportSize({width:390,height:844});
+  await page.locator('.workspace').scrollIntoViewIfNeeded();
+  await page.screenshot({path:'qa/pulido-movil.png'});
+  if(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth)) console.log(await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+2&&el.getBoundingClientRect().width>0).slice(0,20).map(el=>({tag:el.tagName,class:el.className,width:el.getBoundingClientRect().width,right:el.getBoundingClientRect().right}))));
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  await page.screenshot({path:'qa/pulido-movil.png'});
+  await page.goto('http://127.0.0.1:5173/guia-c.html');
+  await page.getByText('Ver los 71 pasos con matriz, código y variables',{exact:true}).click();
+  assert.equal(await page.locator('section#seidel .step').count(),71);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto('http://127.0.0.1:5173/guia-c.html');
+  await page.screenshot({path:'qa/pulido-guia.png'});
+  assert.deepEqual(errors,[]);
+  console.log('Tres métodos, resumen/matrices, controles, descarga, guía y móvil: correctos. Sin errores de JavaScript.');
+  await browser.close();
+})().catch(error=>{console.error(error);process.exit(1)});
