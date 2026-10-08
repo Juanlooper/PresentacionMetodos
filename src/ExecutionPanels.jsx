@@ -1,0 +1,25 @@
+import React,{useEffect,useRef,useState} from 'react';
+import {Code2,Terminal,Copy,Check} from 'lucide-react';
+import cpp from '../public/laboratorio.c?raw';
+import {fmt} from './engine';
+const lines=cpp.split('\n');
+const valueText=v=>Array.isArray(v)?`[${v.map(fmt).join(', ')}]`:typeof v==='number'?fmt(v):String(v);
+export function sourceLine(step){
+ let start=lines.findIndex(l=>l.includes('@'+step.tag+':'));
+ if(step.scope)start=lines.findIndex(l=>l.startsWith('void '+step.scope+'('));
+ if(start<0)start=0;
+ const found=lines.findIndex((l,i)=>i>=start&&l.includes(step.code));
+ return found<0?start:found;
+}
+export function CodeExecution({current,previous,step,playing}){
+ const [full,setFull]=useState(false),[copied,setCopied]=useState(false),pane=useRef(null);
+ const active=sourceLine(current),start=full?0:Math.max(0,active-5),end=full?lines.length:Math.min(lines.length,active+9);
+ useEffect(()=>{const box=pane.current,line=box?.querySelector('.executing-line');if(box&&line)box.scrollTop=Math.max(0,line.offsetTop-85)},[active,step,full]);
+ return <section className="code-panel execution-code" aria-label="Código y variables"><div className="panel-top"><span><Code2 size={17}/> CÓDIGO C</span><span className="language">LÍNEA {active+1} · {playing?'EJECUTANDO':'PAUSA'}</span></div><div className="code-toolbar"><div><button className={!full?'selected':''} onClick={()=>setFull(false)}>Línea actual</button><button className={full?'selected':''} onClick={()=>setFull(true)}>Código completo</button></div><button aria-label="Copiar código completo" onClick={async()=>{try{await navigator.clipboard.writeText(cpp);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{setCopied(false)}}}>{copied?<Check size={14}/>:<Copy size={14}/>}</button></div><div className="code-file">laboratorio.c <span>Índices desde 0 · valores después de la línea indicada</span></div><div ref={pane} className="source debug-source" tabIndex="0" aria-label="Código fuente con línea activa">{lines.slice(start,end).map((l,index)=>{const number=start+index,isActive=number===active;return <div key={number} className={`debug-line ${l.trim().startsWith('//')?'comment-line':''} ${isActive?'executing-line':''}`} aria-current={isActive?'step':undefined}><div className="statement"><span className="line-number">{isActive?'▶':number+1}</span><code>{l.split(/(\b(?:for|if|else|return|int|double|void|const|bool|vector|size_t)\b)/g).map((s,j)=><span key={j} className={/^(for|if|else|return|int|double|void|const|bool|vector|size_t)$/.test(s)?'keyword':''}>{s}</span>)}</code></div>{isActive&&<div className="inline-values" key={step}>{Object.entries(current.vars||{}).map(([name,value])=><span key={name} className={JSON.stringify(previous?.vars?.[name])!==JSON.stringify(value)?'variable-changed':''}><b>{name}</b> = {valueText(value)}</span>)}</div>}</div>})}</div><div className="variables-heading"><span>VARIABLES EN ESTE PASO</span><small>El rosa indica un valor nuevo o modificado</small></div><div className="variable-watch">{Object.entries(current.vars||{}).map(([name,value])=><div key={name} className={JSON.stringify(previous?.vars?.[name])!==JSON.stringify(value)?'changed-watch':''}><code>{name}</code><strong>{valueText(value)}</strong></div>)}</div><p className="debug-note">La línea iluminada corresponde al estado mostrado. En los bucles, cada celda se actualiza en un paso independiente.</p></section>
+}
+export function ExecutionTerminal({steps,step,playing,method,onNext,onPrevious,onPlay,onReset}){
+ const output=useRef(null),current=steps[step];
+ useEffect(()=>{if(output.current)output.current.scrollTop=output.current.scrollHeight},[step,steps]);
+ return <section className="execution-terminal" aria-label="Terminal didáctica"><div className="terminal-title"><span><Terminal size={18}/> Terminal</span><span className="terminal-badge">{method} · PASO {step+1} / {steps.length}</span><span className="terminal-state"><i className={playing?'running':''}/>{playing?'En ejecución':'En pausa'}</span></div><div className="terminal-explanation">Salida didáctica sincronizada con el código y la matriz. Los cálculos se ejecutan en JavaScript, equivalente al C mostrado.</div><div className="terminal-output" ref={output} tabIndex="0" aria-label="Salida acumulada de la terminal"><div className="terminal-command">&gt; laboratorio · {method}</div>{steps.slice(0,step+1).filter(s=>s.stdout).map((s,i)=><pre key={i} className={s===current?'fresh-output':''}>{s.stdout}</pre>)}<div className="terminal-cursor">▌</div></div><div className="terminal-current" aria-live="polite"><span>→</span><div><strong>{current.title}</strong><p>{current.stdout?'La instrucción escribe en la terminal.':'Cálculo interno: la terminal conserva su salida hasta la próxima instrucción printf.'}</p></div></div><div className="terminal-controls"><button onClick={onReset}>Reiniciar</button><button onClick={onPrevious} disabled={step===0}>← Anterior</button><button className="terminal-play" onClick={onPlay}>{playing?'Pausar':'Ejecutar paso a paso'}</button><button onClick={onNext} disabled={step===steps.length-1}>Siguiente →</button></div></section>
+}
+

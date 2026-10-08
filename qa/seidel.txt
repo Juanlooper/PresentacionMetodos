@@ -1,0 +1,38 @@
+Cantidad de ecuaciones y cantidad de incognitas: Fila 1: coeficientes y termino independiente: Fila 2: coeficientes y termino independiente: Fila 3: coeficientes y termino independiente: Metodo: 1 Gauss, 2 Gauss-Jordan, 3 Gauss-Seidel: Tolerancia porcentual (ej. 5) y limite de iteraciones (ej. 100): Sin dominancia estricta: convergencia no garantizada por este criterio.
+     0.52000000     0.20000000     0.25000000 |   4800.00000000
+     0.30000000     0.50000000     0.20000000 |   5810.00000000
+     0.18000000     0.30000000     0.55000000 |   5690.00000000
+
+Iteracion 1, x1 = 9230.76923077
+Iteracion 1, x2 = 6081.53846154
+Iteracion 1, x3 = 4007.27272727
+Cambio maximo (%) = 100.00000000
+x1 = 9230.76923077
+x2 = 6081.53846154
+x3 = 4007.27272727
+Residuo maximo = 2218.12587413
+Iteracion 2, x1 = 4965.14254976
+Iteracion 2, x2 = 7038.00537924
+Iteracion 2, x3 = 4881.58677686
+Cambio maximo (%) = 85.91146454
+x1 = 4965.14254976
+x2 = 7038.00537924
+x3 = 4881.58677686
+Residuo maximo = 409.87189594
+Iteracion 3, x1 = 4176.92736527
+Iteracion 3, x2 = 7161.20887010
+Iteracion 3, x3 = 5072.34620586
+Cambio maximo (%) = 18.87069407
+x1 = 4176.92736527
+x2 = 7161.20887010
+x3 = 5072.34620586
+Residuo maximo = 72.33055542
+Iteracion 4, x1 = 4037.83014330
+Iteracion 4, x2 = 7168.36343168
+Iteracion 4, x3 = 5113.96644491
+Cambio maximo (%) = 3.44485075
+x1 = 4037.83014330
+x2 = 7168.36343168
+x3 = 5113.96644491
+Residuo maximo = 11.83597208
+Tolerancia alcanzada en 4 iteraciones.
